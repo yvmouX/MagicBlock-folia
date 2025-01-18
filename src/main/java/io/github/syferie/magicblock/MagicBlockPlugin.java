@@ -1,5 +1,6 @@
 package io.github.syferie.magicblock;
 
+import com.tcoded.folialib.FoliaLib;
 import io.github.syferie.magicblock.block.BlockManager;
 import io.github.syferie.magicblock.command.CommandManager;
 import io.github.syferie.magicblock.command.handler.TabCompleter;
@@ -45,6 +46,8 @@ public class MagicBlockPlugin extends JavaPlugin {
     private final HashMap<UUID, Integer> playerUsage = new HashMap<>();
     private List<Material> allowedMaterials;
     private LanguageManager languageManager;
+    // //new
+    private FoliaLib foliaLib; // 声明 FoliaLib 实例
 
     @Override
     public void onEnable() {
@@ -88,6 +91,10 @@ public class MagicBlockPlugin extends JavaPlugin {
         initBStats();
 
         getLogger().info(languageManager.getMessage("general.plugin-enabled"));
+
+
+        // //new
+        this.foliaLib = new FoliaLib(this); // 初始化 FoliaLib
     }
 
     private void initBStats() {
@@ -176,6 +183,8 @@ public class MagicBlockPlugin extends JavaPlugin {
             statistics.saveStats();
         }
         getLogger().info(languageManager.getMessage("general.plugin-disabled"));
+        // //new
+        foliaLib.getScheduler().cancelAllTasks();
     }
 
     // 检查更新

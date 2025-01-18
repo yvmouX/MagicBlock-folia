@@ -1,5 +1,6 @@
 package io.github.syferie.magicblock.listener;
 
+import com.tcoded.folialib.FoliaLib;
 import io.github.syferie.magicblock.MagicBlockPlugin;
 import io.github.syferie.magicblock.gui.GUIManager;
 
@@ -28,6 +29,8 @@ import org.bukkit.NamespacedKey;
 
 import java.util.*;
 
+import com.tcoded.folialib.FoliaLib;
+
 public class BlockListener implements Listener {
     private final MagicBlockPlugin plugin;
     private final GUIManager guiManager;
@@ -35,12 +38,16 @@ public class BlockListener implements Listener {
     private final NamespacedKey magicBlockKey;
     private static final long GUI_OPEN_COOLDOWN = 500;
     private final Map<UUID, Long> lastGuiOpenTime = new HashMap<>();
+    // //new
+    private final FoliaLib foliaLib;
 
     public BlockListener(MagicBlockPlugin plugin, List<Material> allowedMaterials) {
         this.plugin = plugin;
         this.guiManager = new GUIManager(plugin, allowedMaterials);
         this.buildingMaterials = new ArrayList<>(allowedMaterials);
         this.magicBlockKey = new NamespacedKey(plugin, "magicblock_location");
+        // //new
+        this.foliaLib = new FoliaLib(plugin);
     }
 
     public void setAllowedMaterials(List<Material> materials) {
@@ -438,10 +445,16 @@ public class BlockListener implements Listener {
                 lastGuiOpenTime.put(player.getUniqueId(), currentTime);
                 event.setCancelled(true);
 
+
+                // //new
                 // 延迟打开GUI
-                plugin.getServer().getScheduler().runTaskLater(plugin, () -> {
+                //plugin.getServer().getScheduler().runTaskLater(plugin, () -> {
+                //    guiManager.getBlockSelectionGUI().openInventory(player);
+                //}, 3L); // 3tick ≈ 150ms的延迟
+                // 使用 FoliaLib 调度任务
+                foliaLib.getScheduler().runAtEntity(player, task -> {
                     guiManager.getBlockSelectionGUI().openInventory(player);
-                }, 3L); // 3tick ≈ 150ms的延迟
+                });
             }
         }
     }
