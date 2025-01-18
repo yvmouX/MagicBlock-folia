@@ -46,7 +46,6 @@ public class MagicBlockPlugin extends JavaPlugin {
     private final HashMap<UUID, Integer> playerUsage = new HashMap<>();
     private List<Material> allowedMaterials;
     private LanguageManager languageManager;
-    // //new
     private FoliaLib foliaLib; // 声明 FoliaLib 实例
 
     @Override
@@ -93,7 +92,6 @@ public class MagicBlockPlugin extends JavaPlugin {
         getLogger().info(languageManager.getMessage("general.plugin-enabled"));
 
 
-        // //new
         this.foliaLib = new FoliaLib(this); // 初始化 FoliaLib
     }
 
@@ -183,7 +181,6 @@ public class MagicBlockPlugin extends JavaPlugin {
             statistics.saveStats();
         }
         getLogger().info(languageManager.getMessage("general.plugin-disabled"));
-        // //new
         foliaLib.getScheduler().cancelAllTasks();
     }
 
