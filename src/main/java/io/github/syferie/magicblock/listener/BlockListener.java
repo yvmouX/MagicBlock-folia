@@ -201,7 +201,7 @@ public class BlockListener implements Listener {
                 return;
             }
 
-            plugin.getServer().getScheduler().runTask(plugin, () -> {
+            foliaLib.getScheduler().runAtEntity(player, task -> {
                 guiManager.getBlockSelectionGUI().handleSearch(player, input);
                 GUIManager.setPlayerSearching(player, false);
             });
@@ -636,12 +636,11 @@ public class BlockListener implements Listener {
         if (event.isCancelled()) {
             return;
         }
-
         // 延迟一tick执行清理工作，确保所有爆炸都已处理完
-        plugin.getServer().getScheduler().runTask(plugin, () -> {
+        foliaLib.getScheduler().runAtLocation(event.getLocation(), task -> {
             Collection<Entity> nearbyEntities = event.getLocation().getWorld().getNearbyEntities(
                     event.getLocation(), 10, 10, 10);
-            
+
             for (Entity entity : nearbyEntities) {
                 if (entity instanceof Item) {
                     Item item = (Item) entity;
